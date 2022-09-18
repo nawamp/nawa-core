@@ -1,30 +1,28 @@
 const path = require('path');
-const webpack = require('webpack');
-
-module.exports = function({ env, package_json }){
+module.exports = function({ env }){
     const is_dev = (env.production === undefined);
     const output_path = path.resolve(__dirname, "..", is_dev?"dev":"dist");
 
+    const externals = {
+        "nawa": "commonjs ./nawa-abstract",
+    };
+    for(let i of "tls,crypto,net,url,stream,http,https,zlib,path,os,fs,utf-8-validate,bufferutils".split(",")) externals[i] = "commonjs " + i;
+
     return [
         {
-            entry: './src/index.js',
+            entry: './nawa-ws/index.js',
             mode: is_dev?'development':'production',
             watch: is_dev,
             output: {
-                filename: 'nawa-abstract.js',
+                filename: 'nawa-ws.js',
                 path: output_path,
-                library: {
-                    type: "commonjs",
-                }
             },
             resolve: {
                 alias: {
-                    src: path.resolve(__dirname, "..", "src"),
-                }
+                    test: path.resolve(__dirname, "..", "test"),
+                },
             },
-            externals: {
-                "crypto": "commonjs crypto",
-            },
+            externals,
             module: {
                 rules: [
                     {
@@ -37,11 +35,6 @@ module.exports = function({ env, package_json }){
                     }
                 ]
             },
-            plugins: [
-                new webpack.DefinePlugin({
-                    NAWA_VERSION: `"${package_json.version}"`,
-                }),
-            ],
         },
     ];
 

@@ -1,5 +1,6 @@
 import session_storage from "./memory_storage";
 import messages from "src/messages";
+import { pubsub_table, rpc_table } from "src/router/table";
 
 const events = require("events");
 
@@ -16,10 +17,14 @@ class SessionManager extends events.EventEmitter {
     }
 
     async close_session(session_id, reason){
-        await this._recv_abort(session_id);
+        session_storage.remove(session_id);
+        pubsub_table.remove_session_id(session_id);
+        rpc_table.remove_session_id(session_id);
+
         this.emit("data", session_id, messages.abort({
             reason: reason?reason:"wamp.close.close_realm",
         }));
+        this.emit("session_close", session_id);
     }
 
     async protocol_violation(session_id){
@@ -77,15 +82,12 @@ class SessionManager extends events.EventEmitter {
     }
 
     async _recv_abort(session_id, data){
-        session_storage.remove(session_id);
         // No response to an ABORT message is expected.
+        return await this.close_session(session_id);
     }
 
     async _recv_goodbye(session_id, data){
-        session_storage.remove(session_id);
-        this.emit("data", session_id, messages.goodbye({
-            reason: "wamp.close.goodbye_and_out",
-        }));
+        return await this.close_session(session_id);
     }
 
 

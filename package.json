@@ -28,9 +28,15 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "bufferutil": "^4.0.6",
     "crypto": "^1.0.1",
     "events": "^3.3.0",
+    "json-bigint": "^1.0.0",
+    "json-stringify-deterministic": "^1.0.7",
     "lodash": "^4.17.21",
-    "randombytes": "^2.1.0"
+    "randombytes": "^2.1.0",
+    "stream": "^0.0.2",
+    "utf-8-validate": "^5.0.9",
+    "ws": "^8.8.1"
   }
 }

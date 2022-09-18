@@ -10,11 +10,11 @@
  * in this class we don't make external references.
  */
 
+
 class SessionData {
 
-    constructor(){
-        this.subscriptions = [];
-        this.RPCs = [];
+    constructor({ session_id }){
+        this.session_id = session_id;
 
         this.established = false;
         this.realm = null;

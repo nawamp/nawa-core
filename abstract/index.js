@@ -1,4 +1,6 @@
 import SessionManager from "./session";
+import PubsubRouter   from "./router/pubsub";
+import RPCRouter      from "./router/rpc";
 
 const events = require("events");
 const _ = require("lodash");
@@ -6,9 +8,22 @@ const _ = require("lodash");
 
 class NawaAbstract extends events.EventEmitter {
 
+    /* Emits:
+     *  - data (session_id, data)
+     *    for transmitting a data packet to given session_id.
+     *  - close_session (session_id)
+     *    the underlying transport (WebSocket) should close this connection as
+     *    indicated by session_id, upon receiving this event.
+     */
+
     constructor(){
         super();
+
         this.session_manager = this._passthru(new SessionManager());
+        this.pubsub_router   = this._passthru(
+            new PubsubRouter(this.session_manager));
+        this.rpc_router      = this._passthru(
+            new RPCRouter(this.session_manager));
     }
 
     _passthru(emitter){
@@ -43,6 +58,9 @@ class NawaAbstract extends events.EventEmitter {
         }
         
         if(this.session_manager.recv(session_id, data)) return;
+        if(this.pubsub_router.recv(session_id, data)) return;
+        if(this.rpc_router.recv(session_id, data)) return;
+        this.session_manager.close(session_id);
     }
 
 }
