@@ -1,0 +1,36 @@
+{
+  "name": "nawa-abstract",
+  "version": "1.0.0",
+  "description": "Abstract WAMP router without actual websocket handling.",
+  "main": "dist/nawa-abstract.js",
+  "scripts": {
+    "dev": "webpack",
+    "dist": "webpack --env production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nawamp/nawa-core.git"
+  },
+  "keywords": [
+    "WAMP"
+  ],
+  "author": "NeoAtlantis",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nawamp/nawa-core/issues"
+  },
+  "homepage": "https://github.com/nawamp/nawa-core#readme",
+  "devDependencies": {
+    "ifdef-loader": "^2.3.2",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "crypto": "^1.0.1",
+    "events": "^3.3.0",
+    "lodash": "^4.17.21",
+    "randombytes": "^2.1.0"
+  }
+}

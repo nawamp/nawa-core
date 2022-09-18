@@ -1,0 +1,4 @@
+*.sw?
+*.pyc
+node_modules
+dev
