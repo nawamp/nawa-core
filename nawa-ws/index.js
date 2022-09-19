@@ -25,8 +25,10 @@ wss.on('connection', async function connection(ws) {
         ws.send(ret);
     });
 
-    nawa.on("close_session", (sid)=>{
+    nawa.on("session_close", (sid)=>{
+        console.log("#1", sid);
         if(session_id != sid) return;
+        console.log("Closing session:", sid);
         ws.close();
     });
 });

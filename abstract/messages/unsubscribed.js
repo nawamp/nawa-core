@@ -1,7 +1,6 @@
 import factory from "./_factory";
 
 export default factory([
-    33,
+    35,
     { name: "request", type: "id" },
-    { name: "subscription", type: "id" },
 ]);

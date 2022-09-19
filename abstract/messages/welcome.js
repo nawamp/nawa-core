@@ -1,14 +1,7 @@
-const _ = require("lodash");
+import factory from "./_factory";
 
-const code = 2;
-function welcome({ session, details }){
-    return [
-        code,
-        session,
-        details
-    ];
-}
-
-
-welcome.code = code;
-export default welcome;
+export default factory([
+    2,
+    { name: "session", type: "id" },
+    { name: "details", type: "dict" },
+]);

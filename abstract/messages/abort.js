@@ -1,11 +1,7 @@
-const code = 3;
-function abort({ details={}, reason }){
-    return [
-        code,
-        details,
-        reason
-    ];
-}
+import factory from "./_factory";
 
-abort.code = code;
-export default abort;
+export default factory([
+    3,
+    { name: "details", type: "dict" },
+    { name: "reason", type: "str" },
+]);

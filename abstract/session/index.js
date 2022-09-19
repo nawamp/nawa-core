@@ -12,6 +12,15 @@ class SessionManager extends events.EventEmitter {
         super();
     }
 
+    assert_session(session_id){
+        let session = session_storage.get(session_id);
+        if(!session || !session.established){
+            this.session_manager.protocol_violation();
+            throw Error("Session not ready.");
+        }
+        return session;
+    }
+
     async create_session(){
         return await session_storage.create();
     }
@@ -23,6 +32,7 @@ class SessionManager extends events.EventEmitter {
 
         this.emit("data", session_id, messages.abort({
             reason: reason?reason:"wamp.close.close_realm",
+            details: {},
         }));
         this.emit("session_close", session_id);
     }
@@ -82,11 +92,13 @@ class SessionManager extends events.EventEmitter {
     }
 
     async _recv_abort(session_id, data){
+        console.log("received ABORT.");
         // No response to an ABORT message is expected.
         return await this.close_session(session_id);
     }
 
     async _recv_goodbye(session_id, data){
+        console.log("received GOODBYE.");
         return await this.close_session(session_id);
     }
 
