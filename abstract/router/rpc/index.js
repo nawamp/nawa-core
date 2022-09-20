@@ -1,4 +1,7 @@
+import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
+import session_storage from "src/session/memory_storage";
+import { rpc_table } from "src/router/table";
 const events = require("events");
 
 class RPCRouter extends events.EventEmitter {
