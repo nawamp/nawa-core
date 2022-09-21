@@ -18,6 +18,8 @@ function checkfield(fieldtype, fieldvalue, fieldoptions){
             );
         case "uri": 
             return _.isString(fieldvalue); // TODO more strict
+        case "enum":
+            return fieldoptions && fieldoptions.values.indexOf(fieldvalue) >= 0;
         default:
             return false;
     }

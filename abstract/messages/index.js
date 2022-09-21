@@ -16,13 +16,21 @@ import registered from "./registered";
 import unregister from "./unregister";
 import unregistered from "./unregistered";
 
+import call from "./call";
+import invocation from "./invocation";
+import _yield from "./yield";
+import result from "./result";
+
+import error from "./error";
+
+
 export default {
     HELLO: hello.code,
     WELCOME: welcome.code,
     ABORT: abort.code,
     GOODBYE: goodbye.code,
 
-    ERROR: 8,
+    ERROR: error.code,
     PUBLISH: publish.code, PUBLISHED: published.code,
     SUBSCRIBE: subscribe.code, SUBSCRIBED: subscribed.code,
     UNSUBSCRIBE: unsubscribe.code, UNSUBSCRIBED: unsubscribed.code,
@@ -30,8 +38,9 @@ export default {
 
     REGISTER: register.code, REGISTERED: registered.code,
     UNREGISTER: unregister.code, UNREGISTERED: unregistered.code,
-    CALL: 48, RESULT: 50,
-    INVOCATION: 68, YIELD: 70,
+
+    CALL: call.code, RESULT: result.code,
+    INVOCATION: invocation.code, YIELD: _yield.code,
 
 
 
@@ -42,4 +51,7 @@ export default {
     event,
 
     register, registered, unregister, unregistered,
+    call, invocation, yield: _yield, result,
+
+    error
 }
