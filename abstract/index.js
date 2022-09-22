@@ -60,7 +60,7 @@ class NawaAbstract extends events.EventEmitter {
         if(this.session_manager.recv(session_id, data)) return;
         if(this.pubsub_router.recv(session_id, data)) return;
         if(this.rpc_router.recv(session_id, data)) return;
-        this.session_manager.close(session_id);
+        this.session_manager.close_session(session_id);
     }
 
 }

@@ -31,7 +31,7 @@ class PubsubRouter extends events.EventEmitter {
         try{
             session = this.session_manager.assert_session(session_id);
         } catch(e){
-            return false;
+            return true; // handled, even if it's meant to no valid session
         }
 
         handler.call(this, { session, session_id, data });
