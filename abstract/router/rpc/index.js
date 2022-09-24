@@ -6,11 +6,14 @@ const events = require("events");
 
 import recv_register from "./recv_register";
 import recv_unregister from "./recv_unregister";
-
+import recv_call from "./recv_call";
+import recv_yield from "./recv_yield";
 
 const RPC_MSGHANDLERS = {};
 RPC_MSGHANDLERS[messages.REGISTER] = recv_register;
 RPC_MSGHANDLERS[messages.UNREGISTER] = recv_unregister;
+RPC_MSGHANDLERS[messages.CALL] = recv_call;
+RPC_MSGHANDLERS[messages.YIELD] = recv_yield;
 
 
 

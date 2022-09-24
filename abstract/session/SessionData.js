@@ -24,6 +24,11 @@ class SessionData {
         this.message_id_counter = 0;
     }
 
+    new_message_id(){
+        this.message_id_counter++;
+        return this.message_id_counter;
+    }
+
 }
 
 export default SessionData;
