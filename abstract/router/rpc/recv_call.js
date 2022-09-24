@@ -48,9 +48,10 @@ export default async function recv_call({ session, session_id, data }){
     });
 
     await invocation_table.add({
-        request_id: invocation_request_id,
+        caller_request_id: msg_call.request,
         caller_session_id: session_id,
         callee_session_id: procedure.session_id,
+        callee_request_id: invocation_request_id,
     });
 
     this.emit("data", procedure.session_id, msg_invocation);

@@ -18,7 +18,7 @@ export default async function recv_yield({ session, session_id, data }){
 
     let invocation_records = await invocation_table.find_requests_with_callee({
         callee_session_id: session_id,
-        request_id: msg_yield.request,
+        callee_request_id: msg_yield.request,
     });
 
     if(invocation_records.length < 1){
@@ -30,10 +30,10 @@ export default async function recv_yield({ session, session_id, data }){
     }
 
     let invocation_record = _.first(invocation_records);
-    let { caller_session_id } = invocation_record;
+    let { caller_session_id, caller_request_id } = invocation_record;
 
     let msg_result = messages.result({
-        request: msg_yield.request,
+        request: caller_request_id,
         details: {},
         arguments: _.get(msg_yield, "arguments", []),
         argumentskw: _.get(msg_yield, "argumentskw", {}),
@@ -45,6 +45,6 @@ export default async function recv_yield({ session, session_id, data }){
 
     await invocation_table.remove_request({
         caller_session_id,
-        request_id: msg_yield.request,
+        caller_request_id
     });
 }

@@ -28,7 +28,11 @@ class InvocationTable {
     constructor(){
         const self = this;
         // [
-        //  { request_id, caller_session_id, callee_session_id, timestamp },
+        //  {
+        //      caller_request_id, callee_request_id,
+        //      caller_session_id, callee_session_id,
+        //      timestamp
+        //  },
         //  ...
         // ]
         setInterval(()=>self.maintenance.call(self), 5000);
@@ -59,36 +63,54 @@ class InvocationTable {
         );
     }
 
-    async add({ request_id, caller_session_id, callee_session_id }){
+    async add({
+        caller_request_id, callee_request_id,
+        caller_session_id, callee_session_id
+    }){
         this.#dataset.push({
-            request_id, caller_session_id, callee_session_id,
+            caller_request_id, caller_session_id,
+            callee_request_id, callee_session_id,
             timestamp: new Date().getTime(),
         });
     }
 
-    async find_requests_with_callee({ callee_session_id, request_id }){
+    async find_requests_with_callee({ callee_session_id, callee_request_id }){
         let ret = _.filter(
             this.#dataset,
             (e)=>
                 e.callee_session_id == callee_session_id &&
-                e.request_id == request_id
+                e.callee_request_id == callee_request_id
         );
         return ret;
     }
 
-    async remove_request({ caller_session_id, callee_session_id, request_id }){
+    async remove_request({
+        caller_request_id,
+        callee_request_id,
+        caller_session_id,
+        callee_session_id
+    }){
         console.log("removing", this.#dataset, arguments);
         return _.remove(
             this.#dataset,
             (e)=>
-                e.request_id == request_id && 
                 (
                     (
-                        caller_session_id != null &&
+                        !_.isNil(caller_request_id) &&
+                        e.caller_request_id == caller_request_id
+                    ) ||
+                    (
+                        !_.isNil(callee_request_id) &&
+                        e.callee_request_id == callee_request_id
+                    )
+                ) && 
+                (
+                    (
+                        !_.isNil(caller_session_id != null) &&
                         e.caller_session_id == caller_session_id
                     ) ||
                     (
-                        callee_session_id != null &&
+                        !_.isNil(callee_session_id != null) &&
                         e.callee_session_id == callee_session_id
                     )
                 )
