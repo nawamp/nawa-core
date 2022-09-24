@@ -1,5 +1,6 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
+import session_manager from "src/session";
 import session_storage from "src/session/memory_storage";
 import { pubsub_table } from "src/router/table";
 
@@ -16,7 +17,7 @@ export default async function recv_publish({ session, session_id, data }){
         msg_publish = messages.publish.parse(data);
     } catch(e){
         console.error(e);
-        return this.session_manager.protocol_violation();
+        return session_manager.protocol_violation(session_id);
     }
 
     // find subscribers

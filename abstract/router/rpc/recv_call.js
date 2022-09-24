@@ -1,8 +1,10 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_storage from "src/session/memory_storage";
+import session_manager from "src/session";
 import { rpc_table } from "src/router/table";
 import invocation_table from "src/router/rpc/invocation_table";
+import on_call_failed_at_server from "./on_call_failed_at_server";
 const _ = require("lodash");
 const events = require("events");
 
@@ -18,7 +20,7 @@ export default async function recv_call({ session, session_id, data }){
         msg_call = messages.call.parse(data);
     } catch(e){
         console.error(e);
-        return this.session_manager.protocol_violation();
+        return session_manager.protocol_violation(session_id);
     }
 
 
@@ -27,12 +29,10 @@ export default async function recv_call({ session, session_id, data }){
 
     // if none procedure callable, return error
     if(procedures.length < 1){
-        this.emit("data", session_id, messages.error({
-            type: messages.CALL,
-            request: msg_call.request,
-            details: {},
-            error: "wamp.error.no_such_procedure",
-        }));
+        on_call_failed_at_server({
+            request_id: msg_call.request,
+            session_id,
+        });
         return;
     }
 

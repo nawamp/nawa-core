@@ -1,6 +1,6 @@
-import SessionManager from "./session";
-import PubsubRouter   from "./router/pubsub";
-import RPCRouter      from "./router/rpc";
+import session_manager from "./session";
+import pubsub_router   from "./router/pubsub";
+import rpc_router      from "./router/rpc";
 
 const events = require("events");
 const _ = require("lodash");
@@ -19,14 +19,12 @@ class NawaAbstract extends events.EventEmitter {
     constructor(){
         super();
 
-        this.session_manager = this._passthru(new SessionManager());
-        this.pubsub_router   = this._passthru(
-            new PubsubRouter(this.session_manager));
-        this.rpc_router      = this._passthru(
-            new RPCRouter(this.session_manager));
+        this.#connect(session_manager);
+        this.#connect(pubsub_router);
+        this.#connect(rpc_router);
     }
 
-    _passthru(emitter){
+    #connect(emitter){
         /* Any data (outgoing protocol packets) emitted by a emitter is
          * emitted on this base class. */
         emitter.on("data", (session_id, data)=>{
@@ -49,7 +47,7 @@ class NawaAbstract extends events.EventEmitter {
          * actually established. Therefore, any further calls to SessionManager
          * must include the session_id as its first argument.
          */
-        return await this.session_manager.create_session();
+        return await session_manager.create_session();
     }
 
     async session_receive(session_id, data){
@@ -60,10 +58,10 @@ class NawaAbstract extends events.EventEmitter {
             );
         }
         
-        if(this.session_manager.recv(session_id, data)) return;
-        if(this.pubsub_router.recv(session_id, data)) return;
-        if(this.rpc_router.recv(session_id, data)) return;
-        this.session_manager.close_session(session_id);
+        if(session_manager.recv(session_id, data)) return;
+        if(pubsub_router.recv(session_id, data)) return;
+        if(rpc_router.recv(session_id, data)) return;
+        session_manager.close_session(session_id);
     }
 
 }

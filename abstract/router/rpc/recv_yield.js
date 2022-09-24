@@ -1,6 +1,7 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_storage from "src/session/memory_storage";
+import session_manager from "src/session";
 import { rpc_table } from "src/router/table";
 import invocation_table from "src/router/rpc/invocation_table";
 const _ = require("lodash");
@@ -13,7 +14,7 @@ export default async function recv_yield({ session, session_id, data }){
         msg_yield = messages.yield.parse(data);
     } catch(e){
         console.error(e);
-        return this.session_manager.protocol_violation();
+        return session_manager.protocol_violation(session_id);
     }
 
     let invocation_records = await invocation_table.find_requests_with_callee({

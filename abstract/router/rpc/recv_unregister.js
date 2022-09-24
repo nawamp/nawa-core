@@ -1,6 +1,7 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_storage from "src/session/memory_storage";
+import session_manager from "src/session";
 import { rpc_table } from "src/router/table";
 const events = require("events");
 
@@ -10,7 +11,7 @@ export default async function recv_register({ session, session_id, data }){
         message = messages.unregister.parse(data);
     } catch(e){
         console.error(e);
-        return this.session_manager.protocol_violation();
+        return session_manager.protocol_violation(session_id);
     }
     let registration_id = message.registration;
     let removed = await rpc_table.remove_id_from_session(

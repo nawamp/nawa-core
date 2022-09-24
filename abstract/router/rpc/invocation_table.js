@@ -19,6 +19,8 @@
 const _ = require("lodash");
 import { router_scope_id } from "src/identifiers/IDs";
 import session_storage from "src/session/memory_storage";
+import session_manager from "src/session";
+import on_call_failed_at_server from "./on_call_failed_at_server";
 
 
 class InvocationTable {
@@ -40,27 +42,38 @@ class InvocationTable {
 
     async maintenance(){
         for(let i=0; i<this.#dataset.length; i++){
-            if(this.#dataset[i].caller_session_id !== null){
-                if(null === session_storage.get(
-                    this.#dataset[i].caller_session_id)
-                ){
-                    this.#dataset[i].caller_session_id = null;
-                }
+            let { caller_session_id, callee_session_id } = this.#dataset[i];
+            if(
+                !_.isNil(caller_session_id) &&
+                !session_storage.exists(caller_session_id)
+            ){
+                this.#dataset[i].caller_session_id = null;
             }
-            if(this.#dataset[i].callee_session_id !== null){
-                if(null === session_storage.get(
-                    this.#dataset[i].callee_session_id)
-                ){
-                    this.#dataset[i].callee_session_id = null;
-                }
+            if(
+                !_.isNil(callee_session_id) &&
+                !session_storage.exists(callee_session_id)
+            ){
+                this.#dataset[i].callee_session_id = null;
             }
         }
 
-        // remove state records with neither caller nor callee connection
+        // notify callers waiting for leaved callees
+        _.forEach(
+            _.filter(this.#dataset, (e)=>_.isNil(e.callee_session_id)),
+            ({ caller_session_id, caller_request_id }) => {
+                on_call_failed_at_server({
+                    request_id: caller_request_id,
+                    session_id: caller_session_id,
+                });
+            }
+        );
+
+        // remove state records with caller or callee disappeared 
         _.remove(
             this.#dataset,
-            (e)=>e.caller_session_id == null && e.callee_session_id == null
+            (e)=>_.isNil(e.caller_session_id) || _.isNil(e.callee_session_id)
         );
+
     }
 
     async add({

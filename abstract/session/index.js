@@ -107,5 +107,6 @@ class SessionManager extends events.EventEmitter {
 }
 
 
+const session_manager = new SessionManager();
 
-export default SessionManager; 
+export default session_manager; 

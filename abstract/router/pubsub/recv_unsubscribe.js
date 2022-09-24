@@ -1,6 +1,7 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_storage from "src/session/memory_storage";
+import session_manager from "src/session";
 import { pubsub_table } from "src/router/table";
 
 export default async function recv_unsubscribe({ session, session_id, data }){
@@ -8,7 +9,7 @@ export default async function recv_unsubscribe({ session, session_id, data }){
     try{
         message = messages.unsubscribe.parse(data);
     } catch(e){
-        return this.session_manager.protocol_violation();
+        return session_manager.protocol_violation(session_manager);
     }
 
     let subscription_id = message.subscription;

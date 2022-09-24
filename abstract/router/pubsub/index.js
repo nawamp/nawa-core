@@ -1,5 +1,6 @@
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
+import session_manager from "src/session";
 import session_storage from "src/session/memory_storage";
 import { pubsub_table } from "src/router/table";
 const events = require("events");
@@ -17,9 +18,8 @@ PUBSUB_MSGHANDLERS[messages.UNSUBSCRIBE] = recv_unsubscribe;
 
 class PubsubRouter extends events.EventEmitter {
 
-    constructor(session_manager){
+    constructor(){
         super();
-        this.session_manager = session_manager;
     }
     
     recv(session_id, data){
@@ -29,7 +29,7 @@ class PubsubRouter extends events.EventEmitter {
 
         let session = null;
         try{
-            session = this.session_manager.assert_session(session_id);
+            session = session_manager.assert_session(session_id);
         } catch(e){
             return true; // handled, even if it's meant to no valid session
         }
@@ -40,4 +40,5 @@ class PubsubRouter extends events.EventEmitter {
 
 }
 
-export default PubsubRouter;
+const router = new PubsubRouter();
+export default router;

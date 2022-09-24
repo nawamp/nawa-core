@@ -1,5 +1,6 @@
 import SessionData from "./SessionData";
 import { global_scope_id } from "src/identifiers/IDs";
+const _ = require("lodash");
 
 
 const session_data = {};
@@ -23,9 +24,13 @@ function remove(session_id){
     delete session_data[session_id];
 }
 
+function exists(session_id){
+    return !_.isNil(_.get(session_data, session_id, null));
+}
 
 export default {
     create,
     remove,
     get,
+    exists,
 }
