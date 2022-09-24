@@ -32,6 +32,9 @@ class NawaAbstract extends events.EventEmitter {
         emitter.on("data", (session_id, data)=>{
             this.emit("data", session_id, data);
         });
+        emitter.on("session_close", (session_id)=>{
+            this.emit("session_close", session_id);
+        });
         return emitter;
     }
 

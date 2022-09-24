@@ -8,6 +8,7 @@ import recv_register from "./recv_register";
 import recv_unregister from "./recv_unregister";
 import recv_call from "./recv_call";
 import recv_yield from "./recv_yield";
+import recv_invocation_error from "./recv_invocation_error";
 
 const RPC_MSGHANDLERS = {};
 RPC_MSGHANDLERS[messages.REGISTER] = recv_register;
@@ -27,8 +28,19 @@ class RPCRouter extends events.EventEmitter {
 
     recv(session_id, data){
         const msgcode = data[0];
-        const handler = RPC_MSGHANDLERS[msgcode];
-        if(undefined === handler) return false;
+        let handler = null;
+        if(msgcode == messages.ERROR){
+            const errorcode = data[1];
+            if(messages.INVOCATION == errorcode){
+                // INVOCATION ERROR
+                handler = recv_invocation_error;
+            } else {
+                return false;
+            }
+        } else {
+            handler = RPC_MSGHANDLERS[msgcode];
+        }
+        if(_.isNil(handler)) return false;
 
         let session = null;
         try{

@@ -53,6 +53,19 @@ const exported = function(format, format_options){
                 }
             }
         }
+
+        if(format_options && format_options.strip_arguments){
+            let del_len = 0;
+            for(let i=format.length-1; i>=0; i--){
+                let { name: fieldname } = format[i];
+                let fieldvalue = params_dict[fieldname];
+                if(fieldname != "arguments" && fieldname != "argumentskw"){
+                    break;
+                }
+                if(_.isEmpty(fieldvalue)) del_len += 1;
+            }
+            built.splice(-del_len);
+        }
         return built;
     }
 

@@ -26,9 +26,10 @@ export default factory([
     { name: "request", type: "id" },
     { name: "details", type: "dict" },
     { name: "error", type: "uri" },
-    { name: "arguments", type: "list" },
-    { name: "argumentskw", type: "dict" },
+    { name: "arguments", type: "list", options: { default: [] } },
+    { name: "argumentskw", type: "dict", options: { default: {} } },
 ], {
     minlength: 5,
     maxlength: 7,
+    strip_arguments: true,
 });
