@@ -3,6 +3,7 @@ module.exports = function({ env }){
     const is_dev = (env.production === undefined);
     const output_path = path.resolve(__dirname, "..", is_dev?"dev":"dist");
 
+    if(is_dev) return [];
     return [
         {
             entry: './test/index.js',
