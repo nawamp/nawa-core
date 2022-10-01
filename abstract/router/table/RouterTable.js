@@ -35,7 +35,16 @@ class RouterTable {
 
     async add({ session_id, realm, uri }){
         // TODO assertions to avoid parameter error
-        // TODO deduplication
+        // deduplication
+        const test_symbols = this.index_session_id.get(session_id);
+        const existing_records = _.filter(
+            this.#retrieve_list_by_symbols(test_symbols),
+            (record)=>record.uri == uri && record.realm == realm
+        ); // [{...}, {...}, ...]
+        if(existing_records.length > 0){
+            return existing_records[0].id;
+        }
+        // if no duplication
         const symbol = Symbol();
         const id = await router_scope_id(this.table_id, realm, uri, {});
         this.#data.set(symbol, { id, session_id, realm, uri });
