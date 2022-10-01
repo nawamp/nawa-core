@@ -19,6 +19,9 @@ function get(session_id){
 }
 
 function remove(session_id){
+    // Returns:
+    //  - true if a session is deleted
+    //  - false if no session deleted
     return session_data.delete(session_id);
 }
 

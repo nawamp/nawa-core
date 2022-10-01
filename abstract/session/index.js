@@ -26,7 +26,10 @@ class SessionManager extends events.EventEmitter {
     }
 
     async close_session(session_id, reason){
-        session_storage.remove(session_id);
+        if(!session_storage.remove(session_id)){
+            // session already removed
+            return;
+        }
         pubsub_table.remove_session_id(session_id);
         rpc_table.remove_session_id(session_id);
 

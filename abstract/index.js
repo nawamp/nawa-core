@@ -64,6 +64,10 @@ class NawaAbstract extends events.EventEmitter {
         session_manager.close_session(session_id);
     }
 
+    async close_session(){
+        session_manager.close_session(session_id);
+    }
+
 }
 
 export { NawaAbstract };
