@@ -1,4 +1,6 @@
 import hello from "./hello";
+import challenge from "./challenge";
+import authenticate from "./authenticate";
 import welcome from "./welcome";
 import abort from "./abort";
 import goodbye from "./goodbye";
@@ -26,6 +28,7 @@ import error from "./error";
 
 export default {
     HELLO: hello.code,
+    CHALLENGE: challenge.code, AUTHENTICATE: authenticate.code,
     WELCOME: welcome.code,
     ABORT: abort.code,
     GOODBYE: goodbye.code,
@@ -44,7 +47,7 @@ export default {
 
 
 
-    hello, abort, goodbye, welcome,
+    hello, challenge, authenticate, abort, goodbye, welcome,
 
     publish, published,
     subscribe, subscribed, unsubscribe, unsubscribed,
