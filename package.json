@@ -1,7 +1,7 @@
 {
-  "name": "nawa-abstract",
+  "name": "nawamp",
   "version": "1.0.0",
-  "description": "Abstract WAMP router without actual websocket handling.",
+  "description": "NeoAtlantis WAMP Router. Includes a server with abstract packet handling.",
   "main": "dist/nawa-abstract.js",
   "scripts": {
     "dev": "webpack",
