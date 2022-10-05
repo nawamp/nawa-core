@@ -1,3 +1,4 @@
+import ProtocolPacketHandler from "src/ProtocolPacketHandler";
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_storage from "src/session/memory_storage";
@@ -20,7 +21,7 @@ RPC_MSGHANDLERS[messages.YIELD] = recv_yield;
 
 
 
-class RPCRouter extends events.EventEmitter {
+class RPCRouter extends ProtocolPacketHandler {
     
     constructor(){
         super();

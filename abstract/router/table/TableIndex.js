@@ -19,6 +19,10 @@ class TableIndex {
         this.#data = new Map();
     }
 
+    size(){
+        return this.#data.size;
+    }
+
     add(lookup_key, referenced_symbol){
         // `referenced_symbol` is the main key in router table.
         if(!this.#data.has(lookup_key)){

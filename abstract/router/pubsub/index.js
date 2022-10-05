@@ -1,3 +1,4 @@
+import ProtocolPacketHandler from "src/ProtocolPacketHandler";
 import { global_scope_id } from "src/identifiers/IDs";
 import messages from "src/messages";
 import session_manager from "src/session";
@@ -16,7 +17,7 @@ PUBSUB_MSGHANDLERS[messages.SUBSCRIBE] = recv_subscribe;
 PUBSUB_MSGHANDLERS[messages.UNSUBSCRIBE] = recv_unsubscribe;
 
 
-class PubsubRouter extends events.EventEmitter {
+class PubsubRouter extends ProtocolPacketHandler {
 
     constructor(){
         super();

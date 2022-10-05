@@ -33,6 +33,15 @@ class RouterTable {
         return true;
     }
 
+    statistic(){
+        return {
+            entries: this.#data.size,
+            index_id: this.index_id.size(),
+            index_session_id: this.index_session_id.size(),
+            index_uri: this.index_uri.size()
+        }
+    }
+
     async add({ session_id, realm, uri }){
         // TODO assertions to avoid parameter error
         // deduplication
